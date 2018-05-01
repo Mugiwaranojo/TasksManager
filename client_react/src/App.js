@@ -20,16 +20,20 @@ class App extends Component {
 	}
 	
 	componentDidMount(){
-		getTasks().then(data => {
+            this.refreshDatas();
+	}
+        
+        refreshDatas(){
+            getTasks().then(data => {
                         data= orderTasksByStatus(data);
-			console.log(data);		
-			this.setState({
+                        console.log(data);		
+                        this.setState({
                             tasks_pending: data["pending"] ? data["pending"]  : [],
                             tasks_ongoing: data["ongoing"] ? data["ongoing"]  : [],
                             tasks_completed:data["completed"] ? data["completed"]  : []
                         })
-		});
-	}
+                });
+        }
 	
 	render() {
 		return (
@@ -47,13 +51,13 @@ class App extends Component {
                         </Grid>
                     </header>
                     <div className="App-content">
-                        <CreateTaskComponent />
+                        <CreateTaskComponent refresh={this.refreshDatas.bind(this)}/>
                         <div className="App-tasks">
                             <Grid>
                                 <Row>
-                                   <TasksListComponent tasks={this.state.tasks_pending} type="pending"/>
-                                   <TasksListComponent tasks={this.state.tasks_ongoing} type="ongoing"/>
-                                   <TasksListComponent tasks={this.state.tasks_completed} type="completed"/>
+                                   <TasksListComponent tasks={this.state.tasks_pending} type="pending" refresh={this.refreshDatas.bind(this)}/>
+                                   <TasksListComponent tasks={this.state.tasks_ongoing} type="ongoing" refresh={this.refreshDatas.bind(this)}/>
+                                   <TasksListComponent tasks={this.state.tasks_completed} type="completed" refresh={this.refreshDatas.bind(this)}/>
                                 </Row>
                             </Grid>
                         </div>

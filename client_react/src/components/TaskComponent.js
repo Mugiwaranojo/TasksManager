@@ -16,19 +16,21 @@ class TaskComponent extends React.Component {
                 updated_status= "completed";
                 break;
         }
+        const refresh = this.props.refresh;
         updateTask(this.props.id, {status:  updated_status}).then(data=>{
            console.log(data); 
            if(!data.error){
-                window.location.reload()
+                refresh();
             }
         });
     }
     
     handclickDeleteTask(e){
+        const refresh = this.props.refresh;
         deleteTask(this.props.id).then(data=>{
            console.log(data); 
            if(!data.error){
-                window.location.reload()
+                refresh();
             }
         });
     }

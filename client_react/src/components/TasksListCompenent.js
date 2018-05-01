@@ -11,10 +11,17 @@ import { Col } from 'react-bootstrap';
 
 class TasksListComponent extends React.Component {
     
+    refreshList(){
+        this.props.refresh()
+    }
+    
     render(){
         return  <Col xs={12} md={this.props.type==="completed" ? 12 : 6} lg={4}>    
                 {this.props.tasks.map((task, index) => (
-                    <TaskComponent key={"task-"+task._id} id={task._id} name={task.name} status={task.status}/>
+                    <TaskComponent key={"task-"+task._id} 
+                                   id={task._id} name={task.name} 
+                                   status={task.status}
+                                   refresh={this.refreshList.bind(this)}/>
                 ))}
                 </Col>;
         

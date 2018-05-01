@@ -20,12 +20,14 @@ class CreateTaskComponent extends React.Component {
     }
     
     handleClick(e) {
+        const refresh = this.props.refresh;
         createTask({name:this.state.value}).then(data=>{
             console.log(data);
             if(!data.error){
-                window.location.reload()
+                refresh();
+                this.setState({value:""});
             }
-        })
+        });
     }
     
     render(){
