@@ -20,7 +20,7 @@ class TasksListComponent extends React.Component {
                 {this.props.tasks.map((task, index) => (
                     <TaskComponent key={"task-"+task._id} 
                                    id={task._id} name={task.name} 
-                                   status={task.status}
+                                   status={task.status[0]}
                                    refresh={this.refreshList.bind(this)}/>
                 ))}
                 </Col>;

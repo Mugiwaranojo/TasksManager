@@ -2,13 +2,15 @@ import React from 'react';
 
 import { Button, Glyphicon } from 'react-bootstrap';
 import {updateTask, deleteTask} from '../services/api-service';
+import { udpdateTaskToStore, removeTaskToStore } from '../redux/actions';
+import { connect } from 'react-redux'
 
 class TaskComponent extends React.Component {
     
     handclickUpdateTask(e){
         var updated_status="";
         console.log(this.props.status);
-        switch(this.props.status[0]){
+        switch(this.props.status){
             case "pending":
                 updated_status= "ongoing";
                 break;
@@ -17,9 +19,12 @@ class TaskComponent extends React.Component {
                 break;
         }
         const refresh = this.props.refresh;
+        const updateStore = this.props.udpdateTaskToStore;
+        var self= this;
         updateTask(this.props.id, {status:  updated_status}).then(data=>{
            console.log(data); 
            if(!data.error){
+                updateStore(self.props.id, self.props.status);
                 refresh();
             }
         });
@@ -27,16 +32,19 @@ class TaskComponent extends React.Component {
     
     handclickDeleteTask(e){
         const refresh = this.props.refresh;
+        const deleteTaskStore = this.props.removeTaskToStore;
+        var self= this;
         deleteTask(this.props.id).then(data=>{
            console.log(data); 
            if(!data.error){
+                deleteTaskStore(self.props.id, self.props.status);
                 refresh();
             }
         });
     }
     
     render() {
-        const buttons_update = this.props.status[0]!=="completed" ?
+        const buttons_update = this.props.status!=="completed" ?
                                 <Button bsStyle="info"
                                     onClick={this.handclickUpdateTask.bind(this)}>
                                     <Glyphicon glyph="chevron-right" />
@@ -45,7 +53,7 @@ class TaskComponent extends React.Component {
         return  <div className={"task task-"+this.props.status}>
                     <span>{this.props.name}</span>
                     {buttons_update}
-                    <Button bsStyle={this.props.status[0]!=="completed" ? "info" : "success"}
+                    <Button bsStyle={this.props.status!=="completed" ? "info" : "success"}
                             onClick={this.handclickDeleteTask.bind(this)}>
                             <Glyphicon glyph="trash" />
                     </Button>
@@ -53,4 +61,4 @@ class TaskComponent extends React.Component {
     }
 };
 
-export default TaskComponent;
+export default connect(null, {udpdateTaskToStore, removeTaskToStore})(TaskComponent);

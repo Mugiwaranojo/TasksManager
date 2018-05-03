@@ -6,7 +6,9 @@
 import React from 'react';
 
 import { Grid, Row, Col, FormControl, Button, Glyphicon } from 'react-bootstrap';
-import {createTask} from '../services/api-service';
+import { createTask} from '../services/api-service';
+import { addTasksToStore } from '../redux/actions';
+import { connect } from 'react-redux'
 
 class CreateTaskComponent extends React.Component {
     
@@ -20,11 +22,11 @@ class CreateTaskComponent extends React.Component {
     }
     
     handleClick(e) {
-        const refresh = this.props.refresh;
         createTask({name:this.state.value}).then(data=>{
             console.log(data);
             if(!data.error){
-                refresh();
+                this.props.addTasksToStore(data);
+                this.props.refresh();
                 this.setState({value:""});
             }
         });
@@ -51,4 +53,8 @@ class CreateTaskComponent extends React.Component {
     }
 }
 
-export default CreateTaskComponent;
+const mapDispatchToProps = {
+ addTasksToStore
+};
+
+export default connect(null, mapDispatchToProps)(CreateTaskComponent);
