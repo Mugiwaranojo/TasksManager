@@ -22,4 +22,3 @@ exports.authCheck= function(req, res, next){
         }
     });
 };
-

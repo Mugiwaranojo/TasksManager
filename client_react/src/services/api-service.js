@@ -1,8 +1,22 @@
 import axios from 'axios';
+import openSocket from 'socket.io-client';
 
+var  socket = null;
 const BASE_URL = 'http://localhost:3300';
 
-export {getTasks, getTask, createTask, updateTask, deleteTask};
+export {initSocket, subscribeToEvent, getTasks, getTask, createTask, updateTask, deleteTask};
+
+function initSocket(token){
+    console.log("initSocket");
+    socket = openSocket(BASE_URL, {query: 'token='+token });
+}
+
+function subscribeToEvent(name, callback) {
+    console.log(socket);
+    if(socket!==null){
+        socket.on(name, callback);
+    }
+}
 
 function getTasks() {
   const url = `${BASE_URL}/tasks`;
@@ -30,6 +44,6 @@ function createTask(dataTask){
  } 
  
 function getAccessToken() {
-  return localStorage.getItem("ACCESS_TOKEN_KEY");
+  return localStorage.getItem("ID_TOKEN");
 }
  

@@ -5,13 +5,13 @@
  */
 import React from 'react';
 import { GoogleLogin } from 'react-google-login-component';
- 
 class Login extends React.Component{
  
   responseGoogle (googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
+    var access_token = googleUser.getAuthResponse().access_token;
     //anything else you want to do(save to localStorage)...
-    this.props.updateInfo(googleUser.getBasicProfile(), id_token);
+    this.props.updateInfo(googleUser.getBasicProfile(), id_token, access_token);
   }
  
   render () {
